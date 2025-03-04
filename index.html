@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanuman Chalisa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            overflow: hidden; /* Prevents overall scrolling */
+        }
+        h1 {
+            color: #333;
+        }
+        #hamburger {
+            font-size: 30px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 20px; /* Top-right corner */
+        }
+        #settings {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 1;
+        }
+        #image-display {
+            margin-top: 20px;
+            height: calc(100vh - 100px); /* Fits within viewport */
+            overflow: hidden;
+        }
+        #mantra-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Fits image to display */
+        }
+        #navigation {
+            margin-top: 10px;
+        }
+        button {
+            margin: 5px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #speaker {
+            cursor: pointer;
+            font-size: 30px;
+            margin-left: 10px;
+        }
+        form {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hanuman Chalisa</h1>
+    <div id="hamburger">☰</div>
+    <div id="settings">
+        <select id="language-select">
+            <option value="">Select a language</option>
+            <option value="english">English</option>
+            <option value="hindi">Hindi</option>
+            <option value="kannada">Kannada</option>
+        </select>
+        <button id="select-button">Select</button>
+        <span id="speaker">🔊</span>
+        <button id="restart-audio">Restart Audio</button>
+        <form id="audio-form">
+            <label for="custom-audio">Select custom audio (optional):</label>
+            <input type="file" id="custom-audio" accept="audio/mpeg">
+        </form>
+        <button id="reset-audio">Use Default Audio</button>
+    </div>
+    <div id="image-display">
+        <img id="mantra-image" src="" alt="Hanuman Chalisa Image">
+        <div id="navigation">
+            <button id="prev-button">Previous</button>
+            <button id="next-button">Next</button>
+        </div>
+    </div>
+    <audio id="mantra-audio"></audio>
+    <script>
+        const imageCount = 5; // Adjust based on your total images per language
+        let currentLanguage = "english"; // Default to English
+        let currentImageIndex = 0;
+        let usingCustomAudio = false; // Track if custom audio is selected
+        const audio = document.getElementById('mantra-audio');
+        const speaker = document.getElementById('speaker');
+        const restartAudioButton = document.getElementById('restart-audio');
+        const languageSelect = document.getElementById('language-select');
+        const selectButton = document.getElementById('select-button');
+        const customAudioInput = document.getElementById('custom-audio');
+        const resetAudioButton = document.getElementById('reset-audio');
+        const mantraImage = document.getElementById('mantra-image');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const settings = document.getElementById('settings');
+        const hamburger = document.getElementById('hamburger');
+        const imageDisplay = document.getElementById('image-display');
+
+        // Update image based on language and index
+        function updateImage() {
+            mantraImage.src = `images/${currentLanguage}/HC_${currentLanguage}-${currentImageIndex + 1}.jpg`;
+        }
+
+        // Initialize with English on page load
+        function init() {
+            languageSelect.value = "english";
+            updateImage();
+            audio.src = `audio/hanuman_chalisa_english.mp3`;
+            imageDisplay.style.display = 'block';
+        }
+        init();
+
+        // Toggle settings menu
+        hamburger.addEventListener('click', () => {
+            settings.style.display = settings.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Play/Pause toggle on speaker click
+        speaker.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                speaker.textContent = "🔇"; // Show pause/mute icon when playing
+            } else {
+                audio.pause();
+                speaker.textContent = "🔊"; // Show play icon when paused
+            }
+        });
+
+        // Restart audio
+        restartAudioButton.addEventListener('click', () => {
+            audio.currentTime = 0; // Reset to start
+            audio.play();          // Play immediately
+            speaker.textContent = "🔇"; // Update icon to reflect playing state
+        });
+
+        // Handle custom audio selection
+        customAudioInput.addEventListener('change', () => {
+            if (customAudioInput.files.length > 0) {
+                const file = customAudioInput.files[0];
+                audio.src = URL.createObjectURL(file);
+                usingCustomAudio = true;
+            }
+        });
+
+        // Reset to default audio
+        resetAudioButton.addEventListener('click', () => {
+            audio.src = `audio/hanuman_chalisa_${currentLanguage}.mp3`;
+            usingCustomAudio = false;
+            document.getElementById('audio-form').reset(); // Clear file input
+        });
+
+        // Language selection (decoupled from audio)
+        selectButton.addEventListener('click', () => {
+            const selectedValue = languageSelect.value;
+            if (selectedValue === "") {
+                alert("Please select a language!");
+                return;
+            }
+            currentLanguage = selectedValue;
+            currentImageIndex = 0;
+            updateImage();
+            settings.style.display = 'none';
+            // Audio continues playing, no change to audio.src
+        });
+
+        // Previous button
+        prevButton.addEventListener('click', () => {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                updateImage();
+            }
+        });
+
+        // Next button
+        nextButton.addEventListener('click', () => {
+            if (currentImageIndex < imageCount - 1) {
+                currentImageIndex++;
+                updateImage();
+            }
+        });
+
+        // Swipe functionality
+        let touchStartX = 0;
+        let touchEndX = 0;
+        imageDisplay.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        imageDisplay.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const swipeDistance = touchStartX - touchEndX;
+            if (swipeDistance > 50 && currentImageIndex < imageCount - 1) {
+                currentImageIndex++;
+                updateImage();
+            } else if (swipeDistance < -50 && currentImageIndex > 0) {
+                currentImageIndex--;
+                updateImage();
+            }
+        });
+    </script>
+</body>
+</html>
