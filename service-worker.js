@@ -16,6 +16,7 @@ const urlsToCache = [
   '/images/English/HC_English-5.jpg',
   '/images/English/HC_English-6.jpg',
   '/images/English/HC_English-7.jpg',
+  '/images/English/HC_English-8.jpg',
   // Images in images/hindi folder
   '/images/Hindi/HC_Hindi-1.jpg',
   '/images/Hindi/HC_Hindi-2.jpg',
@@ -24,13 +25,16 @@ const urlsToCache = [
   '/images/Hindi/HC_Hindi-5.jpg',
   '/images/Hindi/HC_Hindi-6.jpg',
   '/images/Hindi/HC_Hindi-7.jpg',
+  '/images/Hindi/HC_Hindi-8.jpg',
   // Images in images/kannada folder
   '/images/Kannada/HC_Kannada-1.jpg',
   '/images/Kannada/HC_Kannada-2.jpg',
   '/images/Kannada/HC_Kannada-3.jpg',
   '/images/Kannada/HC_Kannada-4.jpg',
   '/images/Kannada/HC_Kannada-5.jpg',
-  '/images/Kannada/HC_Kannada-6.jpg'
+  '/images/Kannada/HC_Kannada-6.jpg',
+  '/images/Kannada/HC_Kannada-7.jpg',
+  '/images/Kannada/HC_Kannada-8.jpg'
 ];
 
 // Install event: cache resources
