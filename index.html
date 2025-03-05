@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hanuman Chalisa</title>
+    <link rel="manifest" href="/manifest.json">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -210,6 +211,15 @@
                 updateImage();
             }
         });
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/serviceworker.js')
+            .then(registration => {
+            console.log('Service Worker registered successfully!');
+            })
+            .catch(error => {
+            console.error('Service Worker failed to register:', error);
+            });
+        }
     </script>
 </body>
 </html>
