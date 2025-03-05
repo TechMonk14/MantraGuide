@@ -4,8 +4,8 @@ const CACHE_NAME = "study-timer-cache-v1";
 const urlsToCache = [
   "./index.html",
   "./manifest.json",
-  '/icons/icon-192x192.png', // App icon
-  '/icons/icon-512x512.png', // App icon
+  '/icons/icon-192.png', // App icon
+  '/icons/icon-512.png', // App icon
   // MP3 files in the audio folder
   '/audio/Shri_Hanuman_Chalisa.mp3',
   // Images in images/english folder
