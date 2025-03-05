@@ -10,7 +10,7 @@
             text-align: center;
             padding: 20px;
             margin: 0;
-            overflow: hidden; /* Prevents overall scrolling */
+            overflow: hidden;
         }
         h1 {
             color: #333;
@@ -20,7 +20,7 @@
             cursor: pointer;
             position: absolute;
             top: 20px;
-            right: 20px; /* Top-right corner */
+            right: 20px;
         }
         #settings {
             display: none;
@@ -31,16 +31,20 @@
             border: 1px solid #ccc;
             padding: 10px;
             z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
         #image-display {
             margin-top: 20px;
-            height: calc(100vh - 100px); /* Fits within viewport */
+            height: calc(100vh - 100px);
             overflow: hidden;
         }
         #mantra-image {
             max-width: 100%;
             max-height: 100%;
-            object-fit: contain; /* Fits image to display */
+            object-fit: contain;
         }
         #navigation {
             margin-top: 10px;
@@ -50,21 +54,16 @@
             padding: 8px 16px;
             font-size: 16px;
             cursor: pointer;
-            background-color: #4CAF50;
+            background-color: #af934c;
             color: white;
             border: none;
             border-radius: 4px;
         }
         button:hover {
-            background-color: #45a049;
-        }
-        #speaker {
-            cursor: pointer;
-            font-size: 30px;
-            margin-left: 10px;
+            background-color: #a09445;
         }
         form {
-            margin-top: 10px;
+            margin-top: 0;
         }
     </style>
 </head>
@@ -72,20 +71,23 @@
     <h1>Hanuman Chalisa</h1>
     <div id="hamburger">☰</div>
     <div id="settings">
-        <select id="language-select">
-            <option value="">Select a language</option>
-            <option value="English">English</option>
-            <option value="Hindi">Hindi</option>
-            <option value="Kannada">Kannada</option>
-        </select>
-        <button id="select-button">Select</button>
-        <span id="speaker">🔊</span>
-        <button id="restart-audio">Restart Audio</button>
+        <div id="lang-controls">
+            <select id="language-select">
+                <option value="">Select a language</option>
+                <option value="english">English</option>
+                <option value="hindi">Hindi</option>
+                <option value="kannada">Kannada</option>
+            </select>
+            <button id="select-button">Select</button>
+        </div>
+        <div id="audio-controls">
+            <button id="play-pause">▶️</button>
+            <button id="restart-audio">🔄</button>
+        </div>  
         <form id="audio-form">
-            <label for="custom-audio">Select custom audio (optional):</label>
+            <label for="custom-audio">Custom Audio:</label>
             <input type="file" id="custom-audio" accept="audio/mpeg">
         </form>
-        <button id="reset-audio">Use Default Audio</button>
     </div>
     <div id="image-display">
         <img id="mantra-image" src="" alt="Hanuman Chalisa Image">
@@ -96,17 +98,16 @@
     </div>
     <audio id="mantra-audio"></audio>
     <script>
-        const imageCount = 7; // Adjust based on your total images per language
-        let currentLanguage = "English"; // Default to English
+        const imageCount = 5;
+        let currentLanguage = "english";
         let currentImageIndex = 0;
-        let usingCustomAudio = false; // Track if custom audio is selected
+        let usingCustomAudio = false;
         const audio = document.getElementById('mantra-audio');
-        const speaker = document.getElementById('speaker');
+        const playPauseButton = document.getElementById('play-pause');
         const restartAudioButton = document.getElementById('restart-audio');
         const languageSelect = document.getElementById('language-select');
         const selectButton = document.getElementById('select-button');
         const customAudioInput = document.getElementById('custom-audio');
-        const resetAudioButton = document.getElementById('reset-audio');
         const mantraImage = document.getElementById('mantra-image');
         const prevButton = document.getElementById('prev-button');
         const nextButton = document.getElementById('next-button');
@@ -123,32 +124,32 @@
         function init() {
             languageSelect.value = "english";
             updateImage();
-            audio.src = `audio/hanuman_chalisa_english.mp3`;
+            audio.src = `audio/Shri_Hanuman_Chalisa.mp3`; // Default audio
             imageDisplay.style.display = 'block';
         }
         init();
 
         // Toggle settings menu
         hamburger.addEventListener('click', () => {
-            settings.style.display = settings.style.display === 'block' ? 'none' : 'block';
+            settings.style.display = settings.style.display === 'flex' ? 'none' : 'flex';
         });
 
-        // Play/Pause toggle on speaker click
-        speaker.addEventListener('click', () => {
+        // Play/Pause toggle
+        playPauseButton.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
-                speaker.textContent = "🔇"; // Show pause/mute icon when playing
+                playPauseButton.textContent = "⏸️";
             } else {
                 audio.pause();
-                speaker.textContent = "🔊"; // Show play icon when paused
+                playPauseButton.textContent = "▶️";
             }
         });
 
         // Restart audio
         restartAudioButton.addEventListener('click', () => {
-            audio.currentTime = 0; // Reset to start
-            audio.play();          // Play immediately
-            speaker.textContent = "🔇"; // Update icon to reflect playing state
+            audio.currentTime = 0;
+            audio.play();
+            playPauseButton.textContent = "⏸️";
         });
 
         // Handle custom audio selection
@@ -157,17 +158,12 @@
                 const file = customAudioInput.files[0];
                 audio.src = URL.createObjectURL(file);
                 usingCustomAudio = true;
+            } else if (!usingCustomAudio) {
+                audio.src = `audio/Shri_Hanuman_Chalisa.mp3`; // Fallback to default if no custom audio
             }
         });
 
-        // Reset to default audio
-        resetAudioButton.addEventListener('click', () => {
-            audio.src = `audio/hanuman_chalisa_${currentLanguage}.mp3`;
-            usingCustomAudio = false;
-            document.getElementById('audio-form').reset(); // Clear file input
-        });
-
-        // Language selection (decoupled from audio)
+        // Language selection
         selectButton.addEventListener('click', () => {
             const selectedValue = languageSelect.value;
             if (selectedValue === "") {
@@ -178,7 +174,6 @@
             currentImageIndex = 0;
             updateImage();
             settings.style.display = 'none';
-            // Audio continues playing, no change to audio.src
         });
 
         // Previous button
