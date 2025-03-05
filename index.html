@@ -11,6 +11,7 @@
             padding: 20px;
             margin: 0;
             overflow: hidden;
+            background-color: #fdfe9a;
         }
         h1 {
             color: #333;
@@ -27,8 +28,8 @@
             position: absolute;
             top: 50px;
             right: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
+            background-color: #fcfe9acc;
+            border: 1px solid #858585aa;
             padding: 10px;
             z-index: 1;
             display: flex;
@@ -81,24 +82,24 @@
             <button id="select-button">Select</button>
         </div>
         <div id="audio-controls">
-            <button id="play-pause">▶️</button>
-            <button id="restart-audio">🔄</button>
+            <button id="play-pause">▶</button>
+            <button id="restart-audio">↩</button>
         </div>  
         <form id="audio-form">
-            <label for="custom-audio">Custom Audio:</label>
+            <label for="custom-audio">Play from device:</label>
             <input type="file" id="custom-audio" accept="audio/mpeg">
         </form>
     </div>
     <div id="image-display">
         <img id="mantra-image" src="" alt="Hanuman Chalisa Image">
         <div id="navigation">
-            <button id="prev-button">Previous</button>
-            <button id="next-button">Next</button>
+            <button id="prev-button">⬅</button>
+            <button id="next-button">➡</button>
         </div>
     </div>
     <audio id="mantra-audio"></audio>
     <script>
-        const imageCount = 7;
+        const imageCount = 8;
         let currentLanguage = "English";
         let currentImageIndex = 0;
         let usingCustomAudio = false;
@@ -138,10 +139,10 @@
         playPauseButton.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
-                playPauseButton.textContent = "⏸️";
+                playPauseButton.textContent = "❚❚";
             } else {
                 audio.pause();
-                playPauseButton.textContent = "▶️";
+                playPauseButton.textContent = "▶";
             }
         });
 
@@ -149,7 +150,7 @@
         restartAudioButton.addEventListener('click', () => {
             audio.currentTime = 0;
             audio.play();
-            playPauseButton.textContent = "⏸️";
+            playPauseButton.textContent = "❚❚";
         });
 
         // Handle custom audio selection
