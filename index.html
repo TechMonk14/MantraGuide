@@ -74,9 +74,9 @@
         <div id="lang-controls">
             <select id="language-select">
                 <option value="">Select a language</option>
-                <option value="english">English</option>
-                <option value="hindi">Hindi</option>
-                <option value="kannada">Kannada</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Kannada">Kannada</option>
             </select>
             <button id="select-button">Select</button>
         </div>
@@ -99,7 +99,7 @@
     <audio id="mantra-audio"></audio>
     <script>
         const imageCount = 7;
-        let currentLanguage = "english";
+        let currentLanguage = "English";
         let currentImageIndex = 0;
         let usingCustomAudio = false;
         const audio = document.getElementById('mantra-audio');
@@ -122,7 +122,7 @@
 
         // Initialize with English on page load
         function init() {
-            languageSelect.value = "english";
+            languageSelect.value = "English";
             updateImage();
             audio.src = `audio/Shri_Hanuman_Chalisa.mp3`; // Default audio
             imageDisplay.style.display = 'block';
